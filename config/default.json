@@ -1,0 +1,6 @@
+{
+    "mongoURI" : "mongodb+srv://bcsakyi2000:mB0aQv9QKz2iOs18@localservice.lnbsdux.mongodb.net/",
+    "jwtSecret": "Learn123456789",
+    "RESEND_API_KEY": "re_BpbRMbJZ_NXnnHjVBHzMEYfav8oXVWRp2",
+    "EMAIL_FROM" : "InYourArea@resend.dev"
+}
