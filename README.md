@@ -34,7 +34,7 @@ The Local-Service platform is designed to:
 
 > 🖼️ Insert project screenshots or demo images here
 > 
-![Landing Page]
+[Landing Page]
 
 ![LandingPage](https://github.com/user-attachments/assets/ae0cda87-ae62-45d6-b3f0-816632a9249c)
 
@@ -49,7 +49,11 @@ Sign Up Page
 
 
 
-![Provider Profile](screenshots/provider-profile.png)
+[Provider Dashboard]
+
+
+![Provider Dashboad](https://github.com/user-attachments/assets/35210667-01bd-4fdf-9b4e-a758e4cd039e)
+
 -->
 
 ---
@@ -79,7 +83,7 @@ Sign Up Page
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/local-service.git
+git clone https://github.com/earmahsakyi/Local-Service-Marketplace.git
 
 # Go into the project directory
 cd local-service
