@@ -80,7 +80,9 @@ export default function (state = initialState, action) {
     case SEARCH_PROVIDERS_SUCCESS:
       return {
         ...state,
-        providers: payload.data,
+        // Ensure providers is always an array, even if payload.data is missing or not an array.
+        // The action now tries to ensure payload.data is correct, but this is an added safeguard.
+        providers: Array.isArray(payload?.data) ? payload.data : [],
         loading: false,
         error: null
       };
