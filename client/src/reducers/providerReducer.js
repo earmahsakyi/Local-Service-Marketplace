@@ -11,7 +11,9 @@ import {
   SEARCH_PROVIDERS_FAIL,
   SET_LOADING,
   CLEAR_ERRORS,
-  // New types for stats and activity
+  CLEAR_PROVIDERS,
+  GET_PROVIDER,
+  GET_PROVIDER_FAIL,
   GET_PROVIDER_STATS_SUCCESS,
   GET_PROVIDER_STATS_FAIL,
   STATS_LOADING,
@@ -22,6 +24,7 @@ import {
 
 const initialState = {
   profile: null,
+  provider: {},
   providers: [], // Assuming this was for a list of providers, may not be relevant to single provider dashboard
   loading: false, // This is for profile loading usually
   error: null,
@@ -41,7 +44,13 @@ export default function (state = initialState, action) {
         ...state,
         loading: true
       };
-
+    case CLEAR_PROVIDERS:
+      return {
+        ...state,
+        providers: null,
+        loading: false,
+        error: null,
+  };
     case GET_PROVIDER_PROFILE_SUCCESS:
       return {
         ...state,
@@ -55,7 +64,18 @@ export default function (state = initialState, action) {
        profile: action.payload,
        loading: false
       };
-
+    case GET_PROVIDER:
+      return{
+        ...state,
+        provider:action.payload,
+        loading:false
+      }
+    case GET_PROVIDER_FAIL:
+      return{
+        ...state,
+        loading: false,
+        error : action.payload
+      }
     case GET_PROVIDERS_SUCCESS:
     case SEARCH_PROVIDERS_SUCCESS:
       return {

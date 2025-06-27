@@ -12,7 +12,9 @@ import {
   SEARCH_PROVIDERS_FAIL,
   SET_LOADING,
   CLEAR_ERRORS,
-  // New types for stats and activity
+  GET_PROVIDER,
+  GET_PROVIDER_FAIL,
+  CLEAR_PROVIDERS,
   GET_PROVIDER_STATS_SUCCESS,
   GET_PROVIDER_STATS_FAIL,
   STATS_LOADING,
@@ -129,26 +131,6 @@ export const getProviders = () => async (dispatch) => {
 };
 
 // Search providers
-export const searchProviders = (criteria) => async (dispatch) => {
-  try {
-    dispatch(setLoading());
-
-    const res = await axios.get('/api/providers/search', {
-      params: criteria
-    });
-
-    dispatch({
-      type: SEARCH_PROVIDERS_SUCCESS,
-      payload: res.data
-    });
-
-  } catch (err) {
-    dispatch({
-      type: SEARCH_PROVIDERS_FAIL,
-      payload: err.response?.data?.msg || 'Error searching providers'
-    });
-  }
-};
 
 // Clear provider profile
 export const clearProviderProfile = () => (dispatch) => {
@@ -160,11 +142,88 @@ export const clearErrors = () => (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
 };
 
+export const clearProviders = () => (dispatch) => {
+  dispatch({type: CLEAR_PROVIDERS})
+}
+
 // Set loading
 export const setLoading = () => ({
   type: SET_LOADING
 });
+// search Providers
+export const searchProviders = (criteria) => async (dispatch) => {
+  try {
+    dispatch(setLoading());
 
+    // Get auth token for search (since your route requires auth)
+    const token = localStorage.getItem('token');
+    const config = {
+      params: criteria,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token' : token,
+
+      }
+    };
+    
+    const res = await axios.get('/api/providers/search', config);
+
+    console.log('Search response:', res.data);
+
+    dispatch({
+      type: SEARCH_PROVIDERS_SUCCESS,
+      payload: res.data
+    });
+
+    return res.data;
+
+  } catch (err) {
+    console.error('Search error:', err);
+    
+    let errorMessage = 'Error searching providers';
+    if (err.response) {
+      errorMessage = err.response.data?.msg || err.response.data?.message || errorMessage;
+      console.error('Server error response:', err.response.data);
+    } else if (err.request) {
+      errorMessage = 'Network error - please check your connection';
+      console.error('Network error:', err.request);
+    } else {
+      errorMessage = err.message || errorMessage;
+      console.error('Request setup error:', err.message);
+    }
+
+    dispatch({
+      type: SEARCH_PROVIDERS_FAIL,
+      payload: errorMessage
+    });
+    
+    throw err;
+  }
+};
+//get providerbyID
+export const getProviderById = (id) => async (dispatch) => {
+
+  try{
+     dispatch(setLoading())
+     const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    };
+
+     const res = await axios.get('/api/provider/:id', config)
+     dispatch({
+      type: GET_PROVIDER,
+      payload: res.data
+    })
+  }
+  catch(err){
+    dispatch({
+      type: GET_PROVIDER_FAIL,
+      payload: err.response?.data?.msg || 'Error loading provider'
+    });
+  }
+}
 // Set Stats Loading
 export const setStatsLoading = () => (dispatch) => {
   dispatch({ type: STATS_LOADING });

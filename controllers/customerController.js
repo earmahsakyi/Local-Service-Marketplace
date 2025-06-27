@@ -39,7 +39,10 @@ exports.createOrUpdateCustomerProfile = async (req, res) => {
     );
     await User.findByIdAndUpdate(req.user.id, { profileUpdated: true });
 
-    res.status(200).json(customer);
+    res.status(200).json({
+      success: true,
+      data: customer
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -53,7 +56,10 @@ exports.getMyCustomerProfile = async (req, res) => {
       return res.status(404).json({ msg: 'Customer profile not found' });
     }
 
-    res.json(customer);
+    res.json({
+      success: true,
+      data: customer
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

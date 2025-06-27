@@ -1,21 +1,51 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}"],
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
         primary: "#2563eb",
         accent: "#2ecc71",
+        // Add colors for alerts
+        'danger': {
+          100: '#fee2e2', // Light red background for alert-danger
+          700: '#b91c1c', // Dark red text for alert-danger
+        },
+        'light': {
+          100: '#f3f4f6', // Light gray background for alert-light
+          700: '#1f2937', // Dark gray text for alert-light
+        },
       },
       fontFamily: {
         heading: ['Montserrat', 'sans-serif'],
-        sans: ['Inter', 'sans-serif']
-      }
+        sans: ['Inter', 'sans-serif'],
+      },
     },
   },
-  plugins: [],
-   corePlugins: {
-    preflight: false, // disables Tailwind's CSS reset
+  plugins: [
+    // Add custom utilities for alert classes
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.alert': {
+          padding: '1rem',
+          borderRadius: '0.375rem',
+          marginBottom: '1rem',
+        },
+        '.alert-danger': {
+          backgroundColor: '#fee2e2', // danger.100
+          color: '#b91c1c', // danger.700
+        },
+        '.alert-light': {
+          backgroundColor: '#f3f4f6', // light.100
+          color: '#1f2937', // light.700
+        },
+      };
+      addUtilities(newUtilities, ['responsive']);
+    },
+  ],
+  corePlugins: {
+    preflight: false, // Keep your existing setting
   },
-}
+};

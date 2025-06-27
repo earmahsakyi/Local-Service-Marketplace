@@ -34,7 +34,7 @@ const Navbar = ({ title }) => {
         <div className="navbar-links">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link" to="/complete-provider-profile">
+              <Link className="nav-link" to="/provider-edit-profile">
                 <UserCog size={18} className="nav-icon" />
                 <span>Edit Profile</span>
               </Link>
@@ -54,7 +54,7 @@ const Navbar = ({ title }) => {
           </ul>
 
           {/* Right side - User & Logout */}
-          <ul className="navbar-actions">
+          <ul className="navbar-actions"> 
             {user && (
               <li className="user-greeting">
                 Hello, <span className="user-email">{user.email}</span>

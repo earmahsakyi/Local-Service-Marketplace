@@ -269,7 +269,10 @@ exports.searchProviders = async (req, res) => {
       query['location.town'] = { $regex: town, $options: 'i' };
     }
 
-    const providers = await Provider.find(query).select('-__v');
+    const providers = await Provider.find(query)
+      .populate('user', ['email'])
+      .select('-__v')
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,

@@ -37,7 +37,7 @@ const Login = () => {
   if (result.role === 'provider') {
     navigate(result.profileUpdated ? '/provider-page' : '/complete-provider-profile');
   } else if (result.role === 'customer') {
-    navigate(result.profileUpdated ? '/customer-dashboard' : '/complete-customer-profile');
+    navigate(result.profileUpdated ? '/customer-page' : '/complete-customer-profile');
   }
 }
 

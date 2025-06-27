@@ -81,7 +81,7 @@ const UpdateProfile = () => {
     }
   };
   const cancel = () => {
-    navigate('/login')
+    navigate('/provider-page')
   }
 
   return (

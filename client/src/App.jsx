@@ -11,8 +11,10 @@ import UpdateProfile from './components/provider/UpdateProfile';
 import UpdateProfileCustomer from './components/customer/UpdateProfileCustomer';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
+import ProviderDetail from './components/provider/ProviderDetail';
 import VerifyEmail from './components/auth/VerifyEmail';
 import Home from './components/pages/Home';
+import editProfile from './components/provider/editProfile'
 import MyBookingsPlaceholder from './components/provider/MyBookingsPlaceholder';
 import ProviderServicesPage from './components/pages/ProviderServicesPage';
 import Store from './store';
@@ -40,8 +42,10 @@ const AppInner = () => {
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/customer-page" element={<PrivateRoute element={CustomerPage} />} />
       <Route path="/complete-provider-profile" element={<PrivateRoute element={UpdateProfile} />} />
+      <Route path="/provider-edit-profile" element={<PrivateRoute element={editProfile} />} />
       <Route path="/complete-customer-profile" element={<PrivateRoute element={UpdateProfileCustomer} />} />
       <Route path="/provider-page" element={<PrivateRoute element={ProviderPage} />} />
+      <Route path="/provider/:id" element={<PrivateRoute element={ProviderDetail} />} />
       <Route path="/provider/bookings" element={<PrivateRoute element={MyBookingsPlaceholder} />} />
       <Route path="/provider/services" element={<PrivateRoute element={ProviderServicesPage} />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
