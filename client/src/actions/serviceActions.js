@@ -75,6 +75,23 @@ export const updateProviderService = (id, serviceData) => async (dispatch) => {
   }
 };
 
+// New action, accepts providerId as parameter
+export const getServicesByProviderId = (providerId) => async (dispatch) => {
+  dispatch(setServicesLoading());
+  try {
+    const res = await axios.get(`/api/provider/services/services/${providerId}`);
+    dispatch({
+      type: GET_PROVIDER_SERVICES_SUCCESS,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_PROVIDER_SERVICES_FAIL,
+      payload: err.response?.data?.msg || err.message || 'Failed to load services'
+    });
+  }
+};
+
 export const deleteProviderService = (id) => async (dispatch) => {
   dispatch(setServicesLoading());
   try {

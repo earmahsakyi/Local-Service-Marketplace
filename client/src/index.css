@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+select {
+  display: block !important; /* Or 'inline-block' */
+  /* Add other resets if Materialize affects height, padding etc. */
+  /* height: auto !important; */
+  /* padding: unset !important; */
+}

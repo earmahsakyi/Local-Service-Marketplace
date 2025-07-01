@@ -10,7 +10,7 @@ import {
   GET_PROVIDERS_FAIL,
   SEARCH_PROVIDERS_SUCCESS,
   SEARCH_PROVIDERS_FAIL,
-  SET_LOADING,
+  PROVIDER_SET_LOADING,
   CLEAR_ERRORS,
   GET_PROVIDER,
   GET_PROVIDER_FAIL,
@@ -84,7 +84,7 @@ export const getCurrentProviderProfile = () => async (dispatch) => {
 // Create or update provider profile
 export const updateProviderProfile = (formData) => async (dispatch) => {
   try {
-    dispatch(setLoading());
+    dispatch(setProviderLoading());
 
     const config = {
       headers: {
@@ -113,9 +113,9 @@ export const updateProviderProfile = (formData) => async (dispatch) => {
 // Get all providers
 export const getProviders = () => async (dispatch) => {
   try {
-    dispatch(setLoading());
+    dispatch(setProviderLoading());
 
-    const res = await axios.get('/api/providers');
+    const res = await axios.get('/api/provider');
 
     dispatch({
       type: GET_PROVIDERS_SUCCESS,
@@ -147,49 +147,63 @@ export const clearProviders = () => (dispatch) => {
 }
 
 // Set loading
-export const setLoading = () => ({
-  type: SET_LOADING
+export const setProviderLoading = () => ({
+  type: PROVIDER_SET_LOADING
 });
 // search Providers
 export const searchProviders = (criteria) => async (dispatch) => {
   try {
-    dispatch(setLoading());
+    dispatch(setProviderLoading());
 
-    // Get auth token for search (since your route requires auth)
     const token = localStorage.getItem('token');
     const config = {
       params: criteria,
       headers: {
         'Content-Type': 'application/json',
-        'x-auth-token' : token,
-
-      }
+        'x-auth-token': token,
+      },
+      timeout: 15000 // Add a 15-second timeout (15000 milliseconds)
     };
     
-    const res = await axios.get('/api/providers/search', config);
+    console.log('Searching providers with criteria:', criteria, 'and config:', config); // More detailed log
+    const res = await axios.get('/api/provider/search', config);
 
     console.log('Search response:', res.data);
 
+    // Ensure res.data and res.data.data exist and res.data.data is an array
+    // The reducer for SEARCH_PROVIDERS_SUCCESS expects action.payload.data to be the array of providers.
+    // So, res.data itself should be an object like { data: [...] }
+    if (!res.data || !Array.isArray(res.data.data)) {
+      console.error('Search response error: res.data or res.data.data is not in expected format.', res.data);
+      throw new Error('Received an invalid response structure from the server.'); 
+    }
+
     dispatch({
       type: SEARCH_PROVIDERS_SUCCESS,
-      payload: res.data
+      payload: res.data // The reducer expects payload.data to be the array
     });
 
     return res.data;
 
   } catch (err) {
-    console.error('Search error:', err);
+    console.error('Search error:', err); // Log the full error object
     
-    let errorMessage = 'Error searching providers';
-    if (err.response) {
-      errorMessage = err.response.data?.msg || err.response.data?.message || errorMessage;
-      console.error('Server error response:', err.response.data);
+    let errorMessage = 'Error searching providers. Please try again.';
+    if (err.code === 'ECONNABORTED') {
+      errorMessage = 'The search request timed out. Please check your connection and try again.';
+      console.error('Search timed out:', err.message);
+    } else if (err.message === 'Received an invalid response structure from the server.') {
+      errorMessage = err.message; // Use the specific error message
+    } else if (err.response) {
+      errorMessage = err.response.data?.msg || err.response.data?.message || `Server error: ${err.response.status}`;
+      console.error('Server error response:', err.response.data || err.response.status);
     } else if (err.request) {
-      errorMessage = 'Network error - please check your connection';
-      console.error('Network error:', err.request);
+      errorMessage = 'Network error - no response received. Please check your connection.';
+      console.error('Network error (no response):', err.request);
     } else {
-      errorMessage = err.message || errorMessage;
-      console.error('Request setup error:', err.message);
+      // This handles errors during request setup or other unexpected errors
+      errorMessage = err.message || 'An unexpected error occurred during search.';
+      console.error('Request setup or other error:', err.message);
     }
 
     dispatch({
@@ -197,24 +211,26 @@ export const searchProviders = (criteria) => async (dispatch) => {
       payload: errorMessage
     });
     
-    throw err;
+    // Optionally, re-throw if components need to react to the error object itself,
+    // but for resetting loading state, dispatching _FAIL is key.
+    // throw err; // Commented out as dispatching FAIL is usually sufficient for UI.
   }
 };
 //get providerbyID
 export const getProviderById = (id) => async (dispatch) => {
 
   try{
-     dispatch(setLoading())
+     dispatch(setProviderLoading())
      const config = {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     };
 
-     const res = await axios.get('/api/provider/:id', config)
+     const res = await axios.get(`/api/provider/${id}`, config)
      dispatch({
       type: GET_PROVIDER,
-      payload: res.data
+      payload: res.data.data
     })
   }
   catch(err){

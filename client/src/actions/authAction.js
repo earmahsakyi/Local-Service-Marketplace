@@ -1,11 +1,18 @@
 import { 
-    AUTH_ERROR,REGISTER_FAIL,REGISTER_SUCCESS,LOGIN_SUCCESS ,LOGIN_FAIL ,LOGOUT ,USER_LOADED,SET_LOADING,
+    AUTH_ERROR,REGISTER_FAIL,REGISTER_SUCCESS,LOGIN_SUCCESS ,LOGIN_FAIL ,LOGOUT ,USER_LOADED,AUTH_SET_LOADING, // Changed SET_LOADING to AUTH_SET_LOADING
     EMAIL_VERIFICATION_CONFIRM_FAILED,EMAIL_VERIFICATION_REQUEST_SENT,EMAIL_VERIFICATION_CONFIRMED,EMAIL_VERIFICATION_REQUEST_FAILED,
     FORGOT_PASSWORD_FAIL,FORGOT_PASSWORD_SUCCESS,RESET_PASSWORD_FAIL,RESET_PASSWORD_SUCCESS,
     CLEAR_AUTH_MESSAGE
 } from './types';
-import setAuthToken from '../utils/setAuthToken'
-import axios from 'axios'
+import setAuthToken from '../utils/setAuthToken';
+import axios from 'axios';
+
+// Renamed setLoading to setAuthLoading and using AUTH_SET_LOADING type
+export const setAuthLoading = () => {
+    return {
+        type: AUTH_SET_LOADING
+    }
+};
 
 // Load User
 export const loadUser = () => async (dispatch) => {
@@ -14,11 +21,10 @@ export const loadUser = () => async (dispatch) => {
   if (!token) {
     return dispatch({ type: AUTH_ERROR }); // Early return if no token
   }
-  dispatch(setLoading());
+  dispatch(setAuthLoading()); // Use new action creator
   setAuthToken(token);
   try {
     
-
     const res = await axios.get('/api/auth');
    
     dispatch({
@@ -36,7 +42,7 @@ export const loadUser = () => async (dispatch) => {
 };
 //Email Verifiction
 export const verifyEmail = (email) => async (dispatch) => {
-  // dispatch(setLoading());
+  // dispatch(setAuthLoading()); // Consider if loading is needed here
   
   try {
     const res = await axios.post('/api/auth/verify-email', { email });
@@ -59,7 +65,7 @@ export const verifyEmail = (email) => async (dispatch) => {
 };
 // Confirm Email
 export const confirmEmail = (token) => async (dispatch) => {
-  dispatch(setLoading());
+  dispatch(setAuthLoading()); // Use new action creator
 
   const email = localStorage.getItem('email'); // Pull the email
 
@@ -95,7 +101,7 @@ export const confirmEmail = (token) => async (dispatch) => {
 
 //login here
 export const login = (formData) => async (dispatch) => {
-  dispatch(setLoading());
+  dispatch(setAuthLoading()); // Use new action creator
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -130,7 +136,7 @@ export const login = (formData) => async (dispatch) => {
                    err.response?.data?.message || 
                    'Login failed';
     
-    M.toast({ html: errorMsg, classes: 'red' });
+     M.toast({ html: errorMsg, classes: 'red' }); // M might not be defined here if not imported/initialized
     
     dispatch({
       type: LOGIN_FAIL,
@@ -149,7 +155,7 @@ export const registerUser = (formData) => async (dispatch) => {
   };
 
   try {
-    dispatch(setLoading());
+    dispatch(setAuthLoading()); // Use new action creator
     const res = await axios.post('/api/auth/register', formData, config);
     const { token, userID, role } = res.data;
     
@@ -191,7 +197,7 @@ export const registerUser = (formData) => async (dispatch) => {
 //forgot password
 
 export const forgotPassword = (email) => async (dispatch) => {
-  dispatch(setLoading());
+  dispatch(setAuthLoading()); // Use new action creator
 
    try {
     const res = await axios.post('/api/auth/forgot-password', { email });
@@ -223,7 +229,7 @@ export const forgotPassword = (email) => async (dispatch) => {
 // Reset password
 export const resetPassword = (email,token, newPassword) => async (dispatch) => {
 
-    dispatch(setLoading());
+    dispatch(setAuthLoading()); // Use new action creator
 
     try {
     const res = await axios.post('/api/auth/reset-password', {email, token, newPassword});
@@ -253,7 +259,7 @@ export const resetPassword = (email,token, newPassword) => async (dispatch) => {
 }
 
 export  const logout = () => async (dispatch) => {
-   dispatch(setLoading())
+   dispatch(setAuthLoading()); // Use new action creator
   localStorage.removeItem('token');
   localStorage.removeItem('role');
   localStorage.removeItem('email');
@@ -262,14 +268,6 @@ export  const logout = () => async (dispatch) => {
 
   
 }
-
-
-export const setLoading = () => {
-    return{
-        type: SET_LOADING
-    }
-
-};
 
 // Clear Auth Message
 export const clearAuthMessage = () => (dispatch) => {

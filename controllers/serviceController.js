@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const Service = require('../models/Service');
-const { recordActivity } = require('../utils/activityHelper'); // Correct path
+const { recordActivity } = require('../utils/activityHelper'); 
+const Provider = require('../models/Provider');
 
 // CREATE SERVICE (should be as previously implemented and correct)
 exports.createService = async (req, res) => {
@@ -12,7 +13,7 @@ exports.createService = async (req, res) => {
   try {
     const providerId = req.user.id;
     const newService = new Service({
-      providerId,
+      providerId ,
       name,
       description,
       price,
@@ -42,6 +43,26 @@ exports.getProviderServices = async (req, res) => {
     res.json(services); // No 404 for empty array, client handles empty list
   } catch (err) {
     console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+};
+
+// public use getting the provider service for customers
+exports.getProviderServicesById = async (req, res) => {
+  try {
+    const providerId = req.params.id;
+    
+    // Find the user ID associated with this provider
+    const provider = await Provider.findById(providerId);
+    if (!provider) {
+      return res.status(404).json({ msg: 'Provider not found' });
+    }
+    
+    const userId = provider.user; // Assuming you have userId field in Provider model
+    const services = await Service.find({ providerId: userId }).sort({ createdAt: -1 });
+    
+    res.json(services);
+  } catch (err) {
     res.status(500).send('Server Error');
   }
 };

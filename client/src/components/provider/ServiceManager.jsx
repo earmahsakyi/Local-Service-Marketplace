@@ -8,7 +8,7 @@ import ServiceFormModal from './ServiceFormModal';
 
 const ServiceManager = () => {
   const dispatch = useDispatch();
-  const { services, loading, error } = useSelector(state => state.service);
+  const { provider_services, loading, error } = useSelector(state => state.service);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState(null);
   const [serviceToDelete, setServiceToDelete] = useState(null);
@@ -27,11 +27,11 @@ const ServiceManager = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('Services updated:', services);
-    if (services.some(service => !service._id)) {
-      console.warn('Invalid service detected:', services);
+    console.log('Services updated:', provider_services);
+    if (provider_services.some(service => !service._id)) {
+      console.warn('Invalid service detected:', provider_services);
     }
-  }, [services]);
+  }, [provider_services]);
 
   const handleAddServiceClick = () => {
     setServiceToEdit(null);
@@ -128,7 +128,7 @@ const ServiceManager = () => {
         </div>
       )}
 
-      {!loading && services.length === 0 && (
+      {!loading && provider_services.length === 0 && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -142,9 +142,9 @@ const ServiceManager = () => {
         </motion.div>
       )}
 
-      {!loading && services.length > 0 && (
+      {!loading && provider_services.length > 0 && (
         <ul className="space-y-3">
-          {services
+          {provider_services
             .filter(service => service._id) // Only render services with _id
             .map((service, index) => (
               <motion.li

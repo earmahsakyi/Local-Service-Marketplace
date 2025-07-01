@@ -31,9 +31,11 @@ export const  RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
   export const GET_CUSTOMERS_FAIL = "GET_CUSTOMERS_FAIL"
 
 //General
-export const  SET_LOADING = 'SET_LOADING';
-export const  CLEAR_ERRORS = 'CLEAR_ERRORS';
-export const  SET_ERROR = 'SET_ERROR';
+export const PROVIDER_SET_LOADING = 'PROVIDER_SET_LOADING'; // Will be primarily for provider/data fetching
+export const AUTH_SET_LOADING = 'AUTH_SET_LOADING'; // For auth specific loading
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';
+export const SET_ERROR = 'SET_ERROR';
+export const CUSTOMER_SET_LOADING = 'CUSTOMER_SET_LOADING';
 
 // Provider profile
 export const GET_PROVIDER_PROFILE = 'GET_PROVIDER_PROFILE';

@@ -50,7 +50,7 @@ router.put(
   ],
   serviceController.updateService
 );
-
+router.get('/services/:id',serviceController.getProviderServicesById);
 // @route   DELETE api/provider/services/:id
 // @desc    Delete a service
 // @access  Private

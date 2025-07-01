@@ -9,7 +9,7 @@ import {
   GET_PROVIDERS_FAIL,
   SEARCH_PROVIDERS_SUCCESS,
   SEARCH_PROVIDERS_FAIL,
-  SET_LOADING,
+  PROVIDER_SET_LOADING,
   CLEAR_ERRORS,
   CLEAR_PROVIDERS,
   GET_PROVIDER,
@@ -39,7 +39,7 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case SET_LOADING:
+    case PROVIDER_SET_LOADING:
       return {
         ...state,
         loading: true
@@ -80,7 +80,9 @@ export default function (state = initialState, action) {
     case SEARCH_PROVIDERS_SUCCESS:
       return {
         ...state,
-        providers: payload.data,
+        // Ensure providers is always an array, even if payload.data is missing or not an array.
+        // The action now tries to ensure payload.data is correct, but this is an added safeguard.
+        providers: Array.isArray(payload?.data) ? payload.data : [],
         loading: false,
         error: null
       };

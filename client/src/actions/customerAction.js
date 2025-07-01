@@ -1,6 +1,6 @@
 import { GET_CUSTOMERS_SUCCESS,GET_CUSTOMER_PROFILE_SUCCESS, GET_CUSTOMER_PROFILE_FAIL,
     UPDATE_CUSTOMER_PROFILE_SUCCESS,UPDATE_CUSTOMER_PROFILE_FAIL,
-    CLEAR_CUSTOMER_PROFILE,GET_CUSTOMERS_FAIL,CLEAR_ERRORS,SET_LOADING
+    CLEAR_CUSTOMER_PROFILE,GET_CUSTOMERS_FAIL,CLEAR_ERRORS,CUSTOMER_SET_LOADING
 } from "./types";
 import axios from 'axios'
 
@@ -50,7 +50,7 @@ export const getCurrentCustomerProfile = () => async (dispatch) => {
 export const updateCustomerProfile = (formData) => async (dispatch) => {
     
     try{
-        dispatch(setLoading())
+        dispatch(setCustomerLoading())
         
         const config = {
             headers: {
@@ -82,7 +82,7 @@ export const updateCustomerProfile = (formData) => async (dispatch) => {
 export const getCustomers = () => async (dispatch) => {
 
     try{
-        dispatch(setLoading())
+        dispatch(setCustomerLoading())
         
         const res = await axios.get('/api/customers')
 
@@ -110,6 +110,6 @@ export const clearErrors = () => dispatch => {
     dispatch({type: CLEAR_ERRORS})
 }
 //Set Loading
-export const setLoading = () => ({
-    type: SET_LOADING
+export const setCustomerLoading = () => ({
+    type: CUSTOMER_SET_LOADING
 })

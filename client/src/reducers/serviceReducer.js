@@ -12,7 +12,7 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  services: [],
+  provider_services: [],
   loading: false,
   error: null
 };
@@ -24,7 +24,7 @@ export default function serviceReducer(state = initialState, action) {
     case GET_PROVIDER_SERVICES_SUCCESS:
       return {
         ...state,
-        services: payload,
+        provider_services: payload,
         loading: false,
         error: null
       };
@@ -35,14 +35,14 @@ export default function serviceReducer(state = initialState, action) {
       }
       return {
         ...state,
-        services: [...state.services, payload],
+        provider_services: [...state.provider_services, payload],
         loading: false,
         error: null
       };
     case UPDATE_PROVIDER_SERVICE_SUCCESS:
       return {
         ...state,
-        services: state.services.map(service =>
+        provider_services: state.provider_services.map(service =>
           service._id === payload._id ? payload : service
         ),
         loading: false,
@@ -51,7 +51,7 @@ export default function serviceReducer(state = initialState, action) {
     case DELETE_PROVIDER_SERVICE_SUCCESS:
       return {
         ...state,
-        services: state.services.filter(service => service._id !== payload),
+        provider_services: state.provider_services.filter(service => service._id !== payload),
         loading: false,
         error: null
       };
