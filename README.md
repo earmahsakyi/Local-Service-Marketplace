@@ -54,7 +54,14 @@ Sign Up Page
 
 ![Provider Dashboad](https://github.com/user-attachments/assets/35210667-01bd-4fdf-9b4e-a758e4cd039e)
 
--->
+Customer Dashboard
+
+![customer dasboard](https://github.com/user-attachments/assets/82ec0ca9-db13-4a6f-9c4f-62f256ebda08)
+
+Search results for Providers
+![c2](https://github.com/user-attachments/assets/0f25b954-648d-4423-8e87-8ca0b3e74789)
+
+
 
 ---
 
